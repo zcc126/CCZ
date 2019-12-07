@@ -49,8 +49,9 @@ class Tondeuse {
   def lireSaisie(numTondeuse: Int, xlimit: Int, ylimit: Int): Unit ={
     do{
       val posiTondeuseSaisie = StdIn.readLine("""|Merci de saisir sa position en respectant la forme, (exemple=>3 4 N)
-                                                 | sinon le programme ne peut pas avancer
-                                                 | saisir "Q" pour quitter le programme""".stripMargin).toList
+                                                 |si x ou y dépasse la taille de la pelouse: => x=Largeur_pelouse, y=Longueur_pelouse
+                                                 |sinon le programme ne peut pas avancer
+                                                 |saisir "Q" pour quitter le programme""".stripMargin).toList
 
       println("*"*100)
       validationDonnees(posiTondeuseSaisie,xlimit,ylimit,numTondeuse)
@@ -59,8 +60,8 @@ class Tondeuse {
     k=1
     do{
       val commandesTondeuseSaisies = StdIn.readLine("""|Merci de saisir les commandes pour la tondeuse en respectant la forme, (exemple=>AAADGAAAAA)
-                                                       |sinon le programme ne peut pas avancer
-                                                       |saisir "Q" pour quitter le programme """.stripMargin ).toList
+                                                       |=> sinon le programme ne peut pas avancer
+                                                       |=> saisir "Q" pour quitter le programme """.stripMargin ).toList
       println("*"*100)
       //println(commandesTondeuseSaisies)
       validationDonnees(commandesTondeuseSaisies,xlimit,ylimit,numTondeuse)
