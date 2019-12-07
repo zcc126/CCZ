@@ -72,6 +72,7 @@ class Tondeuse {
     println("*"*100)
   }
 
+
   /* fonction qui valide les inputs: position initiale?
   commandes de déplacement? commande pour quitter le programme? ou sasie non valide?*/
   def validationDonnees(donneesChar:List[Char], xlimit: Int, ylimit: Int,numTondeuse: Int): Unit = {
@@ -88,6 +89,7 @@ class Tondeuse {
       if (donneesString.contains(" ")) { // si le input contient des espaces, il est soit la position initiale de la tondeuse soit une saisie non valide
 
         val espaceIndex: Int = donneesString.indexOf(" ", 0) //position de la première espace
+
         for (i <- 0 to espaceIndex-1) {
           try {
             donneesString(i).toInt
@@ -98,6 +100,7 @@ class Tondeuse {
             }
           } catch {
             case ex:NumberFormatException =>loop.break()
+            case ex:NoSuchElementException=> loop.break()
           }
         }
 
@@ -122,14 +125,19 @@ class Tondeuse {
           loop.break()
         }
 
-        k = 2 //si k=2, c-à-d la ligne saisie/lue concerne la position de tondeuse, on va ensuite printer les résultats finaux
-        // x et y ne dépassent pas leurs limites
-        coordonneesTondeuse("x") = if (Integer.valueOf(xPosition.toString()) < xlimit) Integer.valueOf(xPosition.toString()) else xlimit
-        coordonneesTondeuse("y") = if (Integer.valueOf(yPosition.toString()) < ylimit) Integer.valueOf(yPosition.toString()) else ylimit
-        printf("La position INITIALE de la Tondeuse %d est(%d,%d,%s)\n",
-          numTondeuse, coordonneesTondeuse("x"), coordonneesTondeuse("y"), directionTondeuse("Direction"))
-        println("*" * 100)
-        loop.break()
+        // x et y ne dépassent pas leurs limites & xposition et yposition sont bien des chiffres
+        try{
+          coordonneesTondeuse("x") = if (Integer.valueOf(xPosition.toString()) < xlimit) Integer.valueOf(xPosition.toString()) else xlimit
+          coordonneesTondeuse("y") = if (Integer.valueOf(yPosition.toString()) < ylimit) Integer.valueOf(yPosition.toString()) else ylimit
+          k=2 //si k=2, c-à-d la ligne saisie/lue concerne la position de tondeuse, on va ensuite printer les résultats finaux
+          printf("La position INITIALE de la Tondeuse %d est(%d,%d,%s)\n",
+            numTondeuse, coordonneesTondeuse("x"), coordonneesTondeuse("y"), directionTondeuse("Direction"))
+          println("*" * 100)
+          loop.break()
+        }catch{
+          case ex:NumberFormatException => loop.break()
+        }
+
       } else {
         loop.break()
       }
@@ -149,7 +157,6 @@ class Tondeuse {
         }
       }
     }
-
 
     if (nombreCommandes==donneesString.length){ //si la liste des commandes de déplacement est valide, execution
       for (element<-donneesString){
