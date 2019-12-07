@@ -6,7 +6,7 @@ import scala.collection.mutable.ListBuffer
 class Tondeuse {
   var coordonneesTondeuse = mutable.Map("x" -> 2, "y" -> 2) // (x,y) de tondeuse
   var directionTondeuse = mutable.Map("Direction" -> "N")  // direction de tondeuse
-  var j = 0 /*un variable qui permet de distinguer entre la ligne correspondant à la position
+  var j = 0 /*une variable qui permet de distinguer entre la ligne correspondant à la position
               et celle pour les commandes de déplacement dans le fichier de test, voir la fonction ChoixCritere*/
   var k:Int=1
 
@@ -60,8 +60,8 @@ class Tondeuse {
     k=1
     do{
       val commandesTondeuseSaisies = StdIn.readLine("""|Merci de saisir les commandes pour la tondeuse en respectant la forme, (exemple=>AAADGAAAAA)
-                                                       |=> sinon le programme ne peut pas avancer
-                                                       |=> saisir "Q" pour quitter le programme """.stripMargin ).toList
+                                                       |sinon le programme ne peut pas avancer
+                                                       |saisir "Q" pour quitter le programme """.stripMargin ).toList
       println("*"*100)
       //println(commandesTondeuseSaisies)
       validationDonnees(commandesTondeuseSaisies,xlimit,ylimit,numTondeuse)
@@ -87,7 +87,7 @@ class Tondeuse {
     loop.breakable {
       if (donneesString.contains(" ")) { // si le input contient des espaces, il est soit la position initiale de la tondeuse soit une saisie non valide
 
-        val espaceIndex: Int = donneesString.indexOf(" ", 0)
+        val espaceIndex: Int = donneesString.indexOf(" ", 0) //position de la première espace
         for (i <- 0 to espaceIndex-1) {
           try {
             donneesString(i).toInt
@@ -115,14 +115,15 @@ class Tondeuse {
           case ex:NumberFormatException => loop.break()
         }
 
-
+        // direction initiale
         if (donneesString.last == "N" || donneesString.last == "W" || donneesString.last == "S" || donneesString.last == "E") { // direction
           directionTondeuse("Direction") = donneesString.last
         } else {
           loop.break()
         }
 
-        k = 2 //si k=2, cad la ligne saisie/lue concerne la position de tondeuse, on va ensuite printer les résultats finaux
+        k = 2 //si k=2, c-à-d la ligne saisie/lue concerne la position de tondeuse, on va ensuite printer les résultats finaux
+        // x et y ne dépassent pas leurs limites
         coordonneesTondeuse("x") = if (Integer.valueOf(xPosition.toString()) < xlimit) Integer.valueOf(xPosition.toString()) else xlimit
         coordonneesTondeuse("y") = if (Integer.valueOf(yPosition.toString()) < ylimit) Integer.valueOf(yPosition.toString()) else ylimit
         printf("La position INITIALE de la Tondeuse %d est(%d,%d,%s)\n",
@@ -189,16 +190,16 @@ class Tondeuse {
   def avancer(xlimit: Int, ylimit: Int) {
     directionTondeuse("Direction") match {
       case "N" => if (coordonneesTondeuse("y") < ylimit) {coordonneesTondeuse("y") += 1
-      } else {println(coordonneesTondeuse.values, "La tondeuse ne peut plus avancer en dehors de la pelouse")
+      } else {printf("(%d,%d,%s), La tondeuse ne peut plus avancer en dehors de la pelouse\n", coordonneesTondeuse("x"),coordonneesTondeuse("y"),directionTondeuse("Direction"))
       }
       case "S" => if (0 < coordonneesTondeuse("y")) {coordonneesTondeuse("y") -= 1
-      } else {println(coordonneesTondeuse.values, "La tondeuse ne peut plus avancer en dehors de la pelouse")
+      } else {printf("(%d,%d,%s), La tondeuse ne peut plus avancer en dehors de la pelouse\n", coordonneesTondeuse("x"),coordonneesTondeuse("y"),directionTondeuse("Direction"))
       }
       case "W" => if (0 < coordonneesTondeuse("x")) {coordonneesTondeuse("x") -= 1
-      } else {println(coordonneesTondeuse.values, "La tondeuse ne peut plus avancer en dehors de la pelouse")
+      } else {printf("(%d,%d,%s), La tondeuse ne peut plus avancer en dehors de la pelouse\n", coordonneesTondeuse("x"),coordonneesTondeuse("y"),directionTondeuse("Direction"))
       }
       case "E" => if (coordonneesTondeuse("x") < xlimit) {coordonneesTondeuse("x") += 1
-      } else {println(coordonneesTondeuse.values, "La tondeuse ne peut plus avancer en dehors de la pelouse")
+      } else {printf("(%d,%d,%s), La tondeuse ne peut plus avancer en dehors de la pelouse\n", coordonneesTondeuse("x"),coordonneesTondeuse("y"),directionTondeuse("Direction"))
       }
     }
   }
