@@ -123,7 +123,7 @@ class Tondeuse {
 
         k = 2 //si k=2, cad la ligne saisie/lue concerne la position de tondeuse, on va ensuite printer les résultats finaux
         coordonneesTondeuse("x") = if (Integer.valueOf(xPosition.toString()) < xlimit) Integer.valueOf(xPosition.toString()) else xlimit
-        coordonneesTondeuse("y") = if (Integer.valueOf(yPosition.toString()) < xlimit) Integer.valueOf(yPosition.toString()) else ylimit
+        coordonneesTondeuse("y") = if (Integer.valueOf(yPosition.toString()) < ylimit) Integer.valueOf(yPosition.toString()) else ylimit
         printf("La position INITIALE de la Tondeuse %d est(%d,%d,%s)\n",
           numTondeuse, coordonneesTondeuse("x"), coordonneesTondeuse("y"), directionTondeuse("Direction"))
         println("*" * 100)
