@@ -86,9 +86,16 @@ class Tondeuse {
     }
 
     loop.breakable {
-      if (donneesString.contains(" ")) { // si le input contient des espaces, il est soit la position initiale de la tondeuse soit une saisie non valide
+      var numEspace=0
+      for (i <- donneesString){ //counter nombred'espace contenu dans l'information lue/saisie
+        if (i == " "){
+         numEspace+=1
+        }
+      }
 
+      if (numEspace==2) { // si le input contient deux espaces, il est soit la position initiale de la tondeuse soit une saisie non valide
         val espaceIndex: Int = donneesString.indexOf(" ", 0) //position de la première espace
+        val espaceIndex2: Int = donneesString.indexOf(" ", espaceIndex+1) //position de la deuxième espace
 
         for (i <- 0 to espaceIndex-1) {
           try {
@@ -100,47 +107,45 @@ class Tondeuse {
             }
           } catch {
             case ex:NumberFormatException =>loop.break()
-            case ex:NoSuchElementException=> loop.break()
           }
         }
 
-        try{
-          val espaceIndex2: Int = donneesString.indexOf(" ", espaceIndex+1) // on ne sait pas s'il existe une deuxième espace, si non, c'est une saisie non valide
-          for (i <- espaceIndex+1 to espaceIndex2-1) {
+        for (i <- espaceIndex+1 to espaceIndex2-1) {
+          try{
             donneesString(i).toInt
             if (donneesString(i).toInt>=0) {
               yPosition.append(donneesString(i)) // coordonnées "y"
             } else{
               loop.break()
             }
+          }catch{
+            case ex:NumberFormatException => loop.break()
           }
-        } catch{
-          case ex:NumberFormatException => loop.break()
         }
-
-        // direction initiale
-        if (donneesString.last == "N" || donneesString.last == "W" || donneesString.last == "S" || donneesString.last == "E") { // direction
-          directionTondeuse("Direction") = donneesString.last
-        } else {
-          loop.break()
-        }
-
-        // x et y ne dépassent pas leurs limites & xposition et yposition sont bien des chiffres
-        try{
-          coordonneesTondeuse("x") = if (Integer.valueOf(xPosition.toString()) < xlimit) Integer.valueOf(xPosition.toString()) else xlimit
-          coordonneesTondeuse("y") = if (Integer.valueOf(yPosition.toString()) < ylimit) Integer.valueOf(yPosition.toString()) else ylimit
-          k=2 //si k=2, c-à-d la ligne saisie/lue concerne la position de tondeuse, on va ensuite printer les résultats finaux
-          printf("La position INITIALE de la Tondeuse %d est(%d,%d,%s)\n",
-            numTondeuse, coordonneesTondeuse("x"), coordonneesTondeuse("y"), directionTondeuse("Direction"))
-          println("*" * 100)
-          loop.break()
-        }catch{
-          case ex:NumberFormatException => loop.break()
-        }
-
       } else {
         loop.break()
       }
+
+      // direction initiale
+      if (donneesString.last == "N" || donneesString.last == "W" || donneesString.last == "S" || donneesString.last == "E") { // direction
+        directionTondeuse("Direction") = donneesString.last
+      } else {
+        loop.break()
+      }
+
+     // x et y ne dépassent pas leurs limites & xposition et yposition sont bien des chiffres
+      try{
+        coordonneesTondeuse("x") = if (Integer.valueOf(xPosition.toString()) < xlimit) Integer.valueOf(xPosition.toString()) else xlimit
+        coordonneesTondeuse("y") = if (Integer.valueOf(yPosition.toString()) < ylimit) Integer.valueOf(yPosition.toString()) else ylimit
+        k=2 //si k=2, c-à-d la ligne saisie/lue concerne la position de tondeuse, on va ensuite printer les résultats finaux
+        printf("La position INITIALE de la Tondeuse %d est(%d,%d,%s)\n",
+          numTondeuse, coordonneesTondeuse("x"), coordonneesTondeuse("y"), directionTondeuse("Direction"))
+        println("*" * 100)
+        loop.break()
+      }catch{
+        case ex:NumberFormatException => loop.break()
+      }
+
       loop.break()
     }
 
